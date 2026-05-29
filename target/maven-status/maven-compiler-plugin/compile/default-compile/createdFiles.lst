@@ -1,0 +1,8 @@
+com\x\ai\ai\controller\ChatResponse.class
+com\x\ai\ai\controller\ChatRequest.class
+com\x\ai\ai\service\ProgrammingAssistantService.class
+com\x\ai\ai\AIServiceApplication.class
+com\x\ai\ai\config\AiConfig.class
+com\x\ai\ai\service\AIAssistantService.class
+com\x\ai\ai\controller\TestController.class
+com\x\ai\ai\service\AiService.class

@@ -1,0 +1,34 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: my-spring-ai
+
+  # PostgreSQL 数据库配置
+  datasource:
+    url: jdbc:postgresql://192.168.1.130:5432/my_ai?currentSchema=public
+    username: postgres
+    password: iot.2024
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  ai:
+    # 阿里百炼配置
+    dashscope:
+      api-key: sk-c9d4ffeb57684a58b1a63bbd8edf8108
+      chat:
+        options:
+          model: qwen-plus
+    
+    # Ollama 本地配置
+    ollama:
+      base-url: http://192.168.1.150:11434
+      chat:
+        options:
+          model: qwen2.5-coder:7b-instruct-q4_K_M
