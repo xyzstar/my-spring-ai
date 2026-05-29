@@ -44,20 +44,28 @@ public class AiService {
 
     public List<String> getAvailableModels() {
         List<String> models = new ArrayList<>();
-        
-        // 添加阿里百炼模型列表
-        models.add("qwen-plus");
-        models.add("qwen-turbo");
-        models.add("qwen-max");
-        models.add("qwen-max-longcontext");
-        models.add("qwen-vl-plus");
-        models.add("qwen-vl-max");
-        models.add("qwen-audio-turbo");
-        models.add("deepseek-v3");
-        models.add("deepseek-r1");
-        models.add("glm-4-plus");
-        models.add("glm-4-flash");
-        
+
+        // 远程阿里百炼模型列表
+        List<String> remoteModels = List.of(
+                "deepseek-v4-flash",
+                "deepseek-v4-pro",
+                "qwen3.7-max-preview",
+                "qwen3.7-max-2026-05-20",
+                "qwen3.7-max-2026-05-17",
+                "qwen3.6-plus",
+                "qwen3.6-flash",
+                "qwen3.6-35b-a3b",
+                "qwen3.6-27b",
+                "qwen3.6-max-preview",
+                "qwen3.6-flash-2026-04-16",
+                "qwen3.5-plus-2026-04-20",
+                "qwen3.6-plus-2026-04-02",
+                "qwen-flash-character-2026-02-26",
+                "kimi-k2.6",
+                "glm-5.1",
+                "gui-plus-2026-02-26"
+        );
+        models.addAll(remoteModels);
         return models;
     }
 

@@ -522,37 +522,28 @@
         const dbQueryButton = document.getElementById('dbQueryButton');
         const resultContainer = document.getElementById('resultContainer');
 
-        // 本地 Ollama 模型列表
+        // 本地 Ollama 模型列表（初始为空，从接口获取）
         const localModels = [];
-
         // 远程阿里百炼模型列表
         const remoteModels = [
-            'qwen-plus',
-            'qwen-turbo',
-            'qwen-max',
-            'qwen-max-longcontext',
-            'qwen-vl-plus',
-            'qwen-vl-max',
-            'qwen-audio-turbo',
-            'deepseek-v3',
-            'deepseek-r1',
-            'glm-4-plus',
-            'glm-4-flash',
-            'qwen3-coder:7b',
-            'qwen3:32b',
-            'qwen3:8b',
-            'glm-5.1',
-            'qwen3.6-plus:2026-04-02',
-            'qwen3.7-max:2026-05-20',
-            'qwen3.5-plus:2026-04-20',
             'deepseek-v4-flash',
             'deepseek-v4-pro',
-            'qwen3.6-27b',
+            'qwen3.7-max-preview',
+            'qwen3.7-max-2026-05-20',
+            'qwen3.7-max-2026-05-17',
+            'qwen3.6-plus',
             'qwen3.6-flash',
-            'qwen-flash-character:2026-02-26',
-            'gpt-plus:2026-02-26'
+            'qwen3.6-35b-a3b',
+            'qwen3.6-27b',
+            'qwen3.6-max-preview',
+            'qwen3.6-flash-2026-04-16',
+            'qwen3.5-plus-2026-04-20',
+            'qwen3.6-plus-2026-04-02',
+            'qwen-flash-character-2026-02-26',
+            'kimi-k2.6',
+            'glm-5.1',
+            'gui-plus-2026-02-26'
         ];
-
         // 初始化
         async function init() {
             // 监听服务模式切换
@@ -598,37 +589,51 @@
             loadDatabaseModels();
         }
 
-        // 加载本地 Ollama 模型
+        // 加载本地 Ollama 模型（从接口动态获取）
         async function loadLocalModels() {
             try {
                 modelSelect.innerHTML = '<option value="">加载中...</option>';
                 
-                // 这里需要从 Ollama API 获取模型列表
-                // 由于浏览器跨域限制，需要后端支持
-                // 暂时使用硬编码的常见模型
-                const ollamaModels = [
-                    'qwen2.5-coder:7b-instruct-q4_K_M',
-                    'deepseek-coder:6.7b-instruct-q4_K_M',
-                    'qwen3.6:latest',
-                    'qwen3.6:35b-a3b',
-                    'qwen3.5:9b'
-                ];
+                const response = await fetch('/api/chat/ollama/models');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const models = await response.json();
+                
+                if (models.length === 0) {
+                    modelSelect.innerHTML = '<option value="">没有可用的模型</option>';
+                    modelHint.textContent = '⚠️ 请确保 Ollama 服务已启动并有对应模型';
+                    modelHint.style.color = '#dc3545';
+                    messageInput.disabled = true;
+                    sendButton.disabled = true;
+                    return;
+                }
+                
+                // 更新本地模型列表
+                localModels.length = 0;
+                localModels.push(...models);
                 
                 modelSelect.innerHTML = '<option value="">请选择模型...</option>';
-                ollamaModels.forEach(model => {
+                models.forEach(model => {
                     const option = document.createElement('option');
                     option.value = model;
                     option.textContent = model;
                     modelSelect.appendChild(option);
                 });
-
-                modelHint.textContent = ' 本地模式：需要确保 Ollama 服务已启动并有对应模型';
-                // 启用输入框和发送按钮
+                
+                modelHint.textContent = `✅ 已加载 ${models.length} 个本地模型`;
+                modelHint.style.color = '#28a745';
                 messageInput.disabled = false;
                 sendButton.disabled = false;
+                
             } catch (error) {
                 console.error('加载本地模型失败:', error);
                 modelSelect.innerHTML = '<option value="">加载失败</option>';
+                modelHint.textContent = '❌ 无法连接到 Ollama 服务，请检查配置';
+                modelHint.style.color = '#dc3545';
+                messageInput.disabled = true;
+                sendButton.disabled = true;
             }
         }
 
@@ -664,40 +669,53 @@
             loadRemoteDatabaseModels();
         }
         
-        // 加载本地 Ollama 模型（数据库查询用）
+        // 加载本地 Ollama 模型（数据库查询用，从接口动态获取）
         async function loadLocalDatabaseModels() {
             dbModelSelect.innerHTML = '<option value="">加载中...</option>';
             
-            const ollamaModels = [
-                'qwen2.5-coder:7b-instruct-q4_K_M',
-                'deepseek-coder:6.7b-instruct-q4_K_M',
-                'qwen3.6:latest',
-                'qwen3.6:35b-a3b',
-                'qwen3.5:9b'
-            ];
-            
-            dbModelSelect.innerHTML = '<option value="">请选择模型...</option>';
-            ollamaModels.forEach(model => {
-                const option = document.createElement('option');
-                option.value = model;
-                option.textContent = model;
-                dbModelSelect.appendChild(option);
-            });
+            try {
+                const response = await fetch('/api/chat/ollama/models');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const models = await response.json();
+                
+                dbModelSelect.innerHTML = '<option value="">请选择模型...</option>';
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    dbModelSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('加载本地数据库模型失败:', error);
+                dbModelSelect.innerHTML = '<option value="">加载失败</option>';
+            }
         }
         
         // 加载远程阿里百炼模型（数据库查询用）
         function loadRemoteDatabaseModels() {
             dbModelSelect.innerHTML = '<option value="">请选择模型...</option>';
-            
+
             const remoteModels = [
-                'qwen-plus',
-                'qwen-turbo',
-                'qwen-max',
-                'qwen-max-longcontext',
-                'deepseek-v3',
-                'deepseek-r1',
-                'glm-4-plus',
-                'glm-4-flash'
+                'deepseek-v4-flash',
+                'deepseek-v4-pro',
+                'qwen3.7-max-preview',
+                'qwen3.7-max-2026-05-20',
+                'qwen3.7-max-2026-05-17',
+                'qwen3.6-plus',
+                'qwen3.6-flash',
+                'qwen3.6-35b-a3b',
+                'qwen3.6-27b',
+                'qwen3.6-max-preview',
+                'qwen3.6-flash-2026-04-16',
+                'qwen3.5-plus-2026-04-20',
+                'qwen3.6-plus-2026-04-02',
+                'qwen-flash-character-2026-02-26',
+                'kimi-k2.6',
+                'glm-5.1',
+                'gui-plus-2026-02-26'
             ];
             
             remoteModels.forEach(model => {
@@ -747,15 +765,26 @@
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
+                // 即使返回 500，也要读取错误信息
                 const data = await response.json();
-                appendMessage('assistant', data.content);
+                
+                if (!response.ok) {
+                    // 后端返回的错误信息
+                    appendMessage('error', data.content || `请求失败: HTTP ${response.status}`);
+                } else {
+                    appendMessage('assistant', data.content);
+                }
             } catch (error) {
                 console.error('Error:', error);
-                appendMessage('error', '抱歉，发生了错误：' + error.message);
+                let errorMessage = '抱歉，发生了错误';
+                
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorMessage = '网络错误，请检查连接';
+                } else {
+                    errorMessage += '：' + error.message;
+                }
+                
+                appendMessage('error', errorMessage);
             } finally {
                 messageInput.disabled = false;
                 sendButton.disabled = false;

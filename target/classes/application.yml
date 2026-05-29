@@ -22,13 +22,8 @@ spring:
     # 阿里百炼配置
     dashscope:
       api-key: sk-c9d4ffeb57684a58b1a63bbd8edf8108
-      chat:
-        options:
-          model: qwen-plus
     
     # Ollama 本地配置
     ollama:
-      base-url: http://192.168.1.150:11434
-      chat:
-        options:
-          model: qwen2.5-coder:7b-instruct-q4_K_M
+      #base-url: http://192.168.1.150:11434
+      base-url: http://144.24.12.178:11434
