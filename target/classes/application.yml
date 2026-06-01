@@ -21,7 +21,7 @@ spring:
   ai:
     # 阿里百炼配置
     dashscope:
-      api-key: sk-c9d4ffeb57684a58b1a63bbd8edf8108
+      api-key: sk-cbc5df1475b642b98d007c98dbf95855
     
     # Ollama 本地配置
     ollama:

@@ -36,6 +36,12 @@
       <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
     
+    <!-- Spring Boot Actuator for health checks -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    
     <!-- Spring AI Alibaba DashScope (阿里百炼) -->
     <dependency>
       <groupId>com.alibaba.cloud.ai</groupId>
