@@ -4,10 +4,14 @@ server:
 spring:
   application:
     name: my-spring-ai
+  
+  # Debug configuration
+  main:
+    log-startup-info: true
 
   # PostgreSQL 数据库配置
   datasource:
-    url: jdbc:postgresql://192.168.1.130:5432/my_ai?currentSchema=public
+    url: jdbc:postgresql://192.168.1.130:5432/iot_platform?currentSchema=public
     username: postgres
     password: iot.2024
     driver-class-name: org.postgresql.Driver
@@ -17,13 +21,30 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
-
   ai:
     # 阿里百炼配置
     dashscope:
       api-key: sk-cbc5df1475b642b98d007c98dbf95855
+      chat:
+        options:
+          model: qwen-plus
     
     # Ollama 本地配置
     ollama:
-      #base-url: http://192.168.1.150:11434
-      base-url: http://144.24.12.178:11434
+      base-url: http://192.168.1.150:11434
+      chat:
+        options:
+          model: qwen2.5-coder:7b-instruct-q4_K_M
+      timeout: 600s  # 10分钟超时（全局超时配置）
+
+
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized

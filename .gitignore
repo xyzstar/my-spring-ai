@@ -3,7 +3,9 @@ target/
 *.iml
 *.log
 
-# Docker
+# Environment variables
 .env
-init-db/*.sql
-!init-db/README.md
+
+# OS files
+.DS_Store
+Thumbs.db

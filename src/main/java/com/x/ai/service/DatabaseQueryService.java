@@ -103,7 +103,7 @@ public class DatabaseQueryService {
             1. 只生成 SELECT 查询，不允许 INSERT、UPDATE、DELETE、DROP 等修改操作
             2. SQL 必须符合 PostgreSQL 语法规范
             3. 如果问题涉及聚合、排序、分组等，请合理使用 SQL 功能
-            4. 限制返回行数，最多返回 100 条记录（使用 LIMIT 100）
+            4. 限制返回行数，最多返回 1000 条记录（使用 LIMIT 1000）
             5. 只返回 SQL 语句本身，不要包含任何解释、注释或其他文字
             6. 不要使用 markdown 代码块标记（如 ```sql）
             7. 必须包含 FROM 子句指定表名
@@ -113,7 +113,7 @@ public class DatabaseQueryService {
             
             示例：
             - 查询所有表：SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'
-            - 查询用户表：SELECT * FROM users LIMIT 100
+            - 查询用户表：SELECT * FROM users LIMIT 1000
             - 统计数量：SELECT COUNT(*) FROM users
             - 查询表注释：SELECT table_name, obj_description((quote_ident(table_schema) || '.' || quote_ident(table_name))::regclass) AS table_comment FROM information_schema.tables WHERE table_schema = 'public'
             

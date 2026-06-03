@@ -4,6 +4,40 @@ server:
 spring:
   application:
     name: my-spring-ai
+  
+  # Debug configuration
+  main:
+    log-startup-info: true
+
+  # PostgreSQL 数据库配置
+  datasource:
+    url: jdbc:postgresql://192.168.1.130:5432/iot_platform?currentSchema=public
+    username: postgres
+    password: iot.2024
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  ai:
+    # 阿里百炼配置
+    dashscope:
+      api-key: sk-cbc5df1475b642b98d007c98dbf95855
+      chat:
+        options:
+          model: qwen-plus
+    
+    # Ollama 本地配置
+    ollama:
+      base-url: http://192.168.1.150:11434
+      chat:
+        options:
+          model: qwen2.5-coder:7b-instruct-q4_K_M
+      timeout: 600s  # 10分钟超时（全局超时配置）
+
+
 
 # Actuator configuration
 management:
@@ -14,25 +48,3 @@ management:
   endpoint:
     health:
       show-details: when-authorized
-
-  # PostgreSQL 数据库配置
-  datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://192.168.1.130:5432/my_ai?currentSchema=public}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:iot.2024}
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
-
-  ai:
-    # 阿里百炼配置
-    dashscope:
-      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:sk-xxxxxxxxxxxxxxxxxxxxxxxxx}
-    
-    # Ollama 本地配置
-    ollama:
-      base-url: ${SPRING_AI_OLLAMA_BASE_URL:http://144.24.12.178:11434}

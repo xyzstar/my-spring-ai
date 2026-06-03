@@ -843,7 +843,7 @@
             
             // 创建 AbortController 用于超时控制
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒超时
+            const timeoutId = setTimeout(() => controller.abort(), 600000); // 10分钟超时（本地 Ollama 模型）
             
             try {
                 const response = await fetch('/api/database/query', {
