@@ -35,8 +35,8 @@ SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=your_password
 
 # AI 服务配置
-DASHSCOPE_API_KEY=your_dashscope_api_key
-OLLAMA_BASE_URL=http://host.docker.internal:11434
+SPRING_AI_DASHSCOPE_API_KEY=your_dashscope_api_key
+SPRING_AI_OLLAMA_BASE_URL=http://host.docker.internal:11434
 ```
 
 **重要提示：**
