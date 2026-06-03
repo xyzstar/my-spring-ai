@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Copy the JAR file
-COPY target/my-spring-ai-1.0-SNAPSHOT.jar app.jar
+COPY my-spring-ai-1.0-SNAPSHOT.jar app.jar
 
 # Expose port
 EXPOSE 8000
